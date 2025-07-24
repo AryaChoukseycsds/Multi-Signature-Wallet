@@ -126,4 +126,35 @@ contract MultiSignatureWallet {
     function getOwners() external view returns (address, address, address) {
         return (owner1, owner2, owner3);
     }
+
+    /// 🔹 New Function Added
+    function getConfirmations(uint256 _txId)
+        external
+        view
+        txExists(_txId)
+        returns (address[] memory confirmedOwners)
+    {
+        Transaction storage transaction = transactions[_txId];
+        address ;
+        uint256 count = 0;
+
+        if (transaction.isConfirmed[owner1]) {
+            temp[count] = owner1;
+            count++;
+        }
+        if (transaction.isConfirmed[owner2]) {
+            temp[count] = owner2;
+            count++;
+        }
+        if (transaction.isConfirmed[owner3]) {
+            temp[count] = owner3;
+            count++;
+        }
+
+        confirmedOwners = new address[](count);
+        for (uint256 i = 0; i < count; i++) {
+            confirmedOwners[i] = temp[i];
+        }
+    }
 }
+// Added one function Suggested by ChatGpt
